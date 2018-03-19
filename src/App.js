@@ -9,7 +9,8 @@ class MyProvider extends Component {
   state = {
     name: 'Wes',
     age: 100,
-    cool: true
+    cool: true,
+    asyncData: undefined,
   }
   render() {
     return (
@@ -35,7 +36,7 @@ class MyProvider extends Component {
             .then((res) => res.body.title)
             .catch((res) => res)
 
-          return `${resp1} ++++++++++++++++++++ ${resp2}`
+          this.setState({asyncData: `${resp1} ++++++++++++++++++++ ${resp2}`})
         }
       }}>
         {this.props.children}
@@ -51,28 +52,20 @@ const Family = (props) => (
 )
 
 class Person extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      test: null
-    }
-  }
-
   doSomething(context) {
-    context.getStuff().then(resp => this.setState({test: resp}))
+    context.getStuff()
   }
 
   render() {
-    const { test } = this.state
     return (
       <div style={{marginLeft: 10}}>
         <MyContext.Consumer>
           {(context) => (
             <React.Fragment>
-              <div>{test}</div>
+              <div>{context.state.asyncData}</div>
               <p>Age: {context.state.age}</p>
               <p>Name: {context.state.name}</p>
-              {!test && <button onClick={() => this.doSomething(context)}>get stuff</button>}
+              {!context.state.asyncData && <button onClick={() => this.doSomething(context)}>get stuff</button>}
             </React.Fragment>
           )}
         </MyContext.Consumer>
