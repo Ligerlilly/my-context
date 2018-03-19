@@ -19,14 +19,16 @@ class MyProvider extends Component {
           age: this.state.age + 1
         }),
         getStuff: async () => {
-          const resp1 = await request.get("https://jsonplaceholder.typicode.com/posts/1")
+          const resp1 = await request
+            .get("https://jsonplaceholder.typicode.com/posts/1")
             .type("application/json;charset=utf-8")
             .accept("application/json;charset=utf-8")
             .end()
             .then((res) => res.body.title)
             .catch((res) => res)
 
-          const resp2 = await request.get("https://jsonplaceholder.typicode.com/posts/2")
+          const resp2 = await request
+            .get("https://jsonplaceholder.typicode.com/posts/2")
             .type("application/json;charset=utf-8")
             .accept("application/json;charset=utf-8")
             .end()
@@ -61,15 +63,16 @@ class Person extends Component {
   }
 
   render() {
+    const { test } = this.state
     return (
       <div style={{marginLeft: 10}}>
         <MyContext.Consumer>
           {(context) => (
             <React.Fragment>
-              <div>{this.state.test}</div>
+              <div>{test}</div>
               <p>Age: {context.state.age}</p>
               <p>Name: {context.state.name}</p>
-              <button onClick={() => this.doSomething(context)}>get stuff</button>
+              {!test && <button onClick={() => this.doSomething(context)}>get stuff</button>}
             </React.Fragment>
           )}
         </MyContext.Consumer>
@@ -83,7 +86,7 @@ class App extends Component {
   render() {
     return (
       <MyProvider>
-        <div>
+        <div style={{marginLeft: 10}}>
           <p>I'm the app</p>
           <Family />
         </div>
